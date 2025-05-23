@@ -81,4 +81,4 @@ with open(output_path, "w", encoding="utf-8") as json_file:
     json.dump(dados_json, json_file, ensure_ascii=False, indent=4)
 
 print(f"\nArquivo JSON gerado com sucesso em: {output_path}")
-f = open("dados_extracao_com_idade")
+
