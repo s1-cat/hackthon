@@ -14,23 +14,19 @@ with open('dados_extracao_com_idade.json', 'r', encoding='utf-8') as arquivo2:
 primeira_chave = next(iter(ddados))
 print(primeira_chave, ddados[primeira_chave])
 
-
-
-
-
 with open('dados_extracao_com_idade.json', 'r', encoding='utf-8') as arquivo:
   add = json.load(arquivo)
 
 
-data = ["test para ver oque acontece", "um dia vai dar certo essa porra test porra porra "] ## Feature
+## data = ["test para ver oque acontece", "um dia vai dar certo essa porra test porra porra "] ## Feature  remove talvez
 toke = Tokenizer()
 toke.fit_on_texts(add)
-y = [-1000, 20, 900 ,210, 200, 500, 230, 506, 800, 100] ## labels 
+y = [-1000, 20, 900 ,210, 200, 500, 230, 506, 800, 100] ## labels
 
-##print(data)
-##print(toke.word_index) ## para criar um tokem por palavra 
-##print(toke.texts_to_sequences(data)) ## transforma os textos em sequências numéricas
-word_index = toke.word_index 
+## print(data) remove talvez
+print(toke.word_index) ## para criar um tokem por palavra
+print(toke.texts_to_sequences(data)) ## transforma os textos em sequências numéricas
+word_index = toke.word_index
 sequencia = toke.texts_to_sequences(add)
 
 
@@ -38,7 +34,7 @@ sequencia = toke.texts_to_sequences(add)
 
 tokens_max_trainig = max([len(seq) for seq in sequencia]) ## pegando o tamanho do tokes de entrada no treinamento
 
-x = pad_sequences(sequencia, maxlen=tokens_max_trainig)  ## add 0 para q todos os tokens sejam iguais no tamanho no treinamento 
+x = pad_sequences(sequencia, maxlen=tokens_max_trainig)  ## add 0 para q todos os tokens sejam iguais no tamanho no treinamento
 
 y = np.array(y) ## transformando em matrix
 
@@ -60,39 +56,69 @@ loss = model.evaluate(X_test, y_test)
 print(f"Loss no conjunto de teste: {loss}")
 
 
-# Passo 8: Fazendo previsões
+#Fazendo previsões
 text_to_predict = "Avaliação do paciente Paciente admitido de maca sendo pego de carro de tutora apresentando intensa fraqueza em "
 seq = toke.texts_to_sequences([text_to_predict])
 padded_seq = pad_sequences(seq, maxlen=tokens_max_trainig )
+
 name = "MASSU"
-line_break = "\n"
+line_break = " : "
 line_break += name
 predicted_number = model.predict(padded_seq)
+
+type(predicted_number)
+print(predicted_number)
+
+end = " }"
 print(f"O número previsto para o texto '{text_to_predict}' é: {predicted_number[0][0]}")
-
+re = " "
 caminho_pasta = "/content/dados.json"
-
+star = "{ "
 re = str(predicted_number[0][0])
 re += line_break
+re += end
+star += re
+break_line = "\n"
+star += break_line
 print(re)
+print(star)
 
-mode = 1 # 0 normal 1 para gerar treinamento 
+mode = 1 # 0 normal 1 para gerar treinamento
 
+name_json = " "
 
-  
 
 with open(caminho_pasta, "w", encoding="utf-8") as json_file:
-    json.dump(re, json_file, ensure_ascii=False, indent=4)
-i = 0
+    json.dump( star, json_file, ensure_ascii=False, indent=4)
+    print(star)
+    #json.dumps(star)
+
+
+
 if mode == 1:
-  while 1 :
+  i = 1
+  while 1:
+    if i == 10:
+      break
     data_generetior = model.predict(padded_seq)
     re1 = str(data_generetior[0][0])
     line_break = "\n"
     line_break += name
     re1 += line_break
+    re1 += end
+
     with open(caminho_pasta, "a", encoding="utf-8") as json_file:
-      json.dump(re1, json_file, ensure_ascii=False, indent=4)
-    if i == 10:
-      break 
-    i+= 1 
+      json.dump( star, json_file, ensure_ascii=False, indent=4)
+
+    print(star)
+     # json.dumps(star)
+
+    i+= 1
+dic = [re1]
+"""
+with open(caminho_pasta, "r+", encoding="utf-8") as json_file:
+  for linha in json_file:
+        if linha.strip():
+          dic.append(json.loads(linha))
+"""
+
